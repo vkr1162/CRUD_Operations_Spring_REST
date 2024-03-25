@@ -1,10 +1,11 @@
 package com.vamsi.controller;
 
+
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vamsi.entity.Customer;
 import com.vamsi.service.CustService;
 
+
+import jakarta.persistence.TableGenerator;
+
 @RestController
 @RequestMapping("/customer-api")
+//@Tag(name="Customer Controller", description="Perfroming CRUD Operations on Customer")
 public class CustomerController {
 
 	@Autowired
 	private CustService custService;
 	
+	//@Operation( description = "Registering the Customer")
 	@PostMapping("/register")
 	private ResponseEntity<?> registerCustomer(@RequestBody Customer cust){
 		//System.out.println(cust.toString());
@@ -39,6 +45,7 @@ public class CustomerController {
 		
 	}
 	
+	//@Operation( description = "Search Customer By ID")
 	@GetMapping("/getCustomer/{id}")
 	private ResponseEntity<?> getCustomerById(@PathVariable Integer id){
 		try {
@@ -48,6 +55,7 @@ public class CustomerController {
 			return new ResponseEntity<Exception>(e,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	//@Operation( description = "Search Customer by Address")
 	@GetMapping("/getCustomerByCity/{cAddress}")
 	private ResponseEntity<?> getCustomerByAddress(@PathVariable(name="cAddress") String city){
 		System.out.println(city);
@@ -58,6 +66,7 @@ public class CustomerController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	//@Operation(description = "Update the Entire Customer details")
 	@PutMapping("/modify")
 	private ResponseEntity<?> updateCustomer(@RequestBody Customer cust){
 		try {
@@ -67,7 +76,7 @@ public class CustomerController {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+	//@Operation( description = "Updating the price of the Customer")
 	@PatchMapping("/updatePrice/{id}/{price}")
 	private ResponseEntity<String> modifyCustPrice(@PathVariable Integer id, @PathVariable Double price){
 		try {
@@ -78,6 +87,7 @@ public class CustomerController {
 		}
 	}
 	
+	//@Operation( description = "Deleting the Customer using id")
 	@DeleteMapping("/delete/{id}")
 	private ResponseEntity<?> deleteCustomerById(@PathVariable Integer id){
 		try {
@@ -86,5 +96,16 @@ public class CustomerController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/getAll")
+	private ResponseEntity<?> getAllCustomers(){
+		try {
+			List<Customer> custList	= custService.getAllCustomers();
+			return new ResponseEntity<List<Customer>>(custList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	
 	}
 }

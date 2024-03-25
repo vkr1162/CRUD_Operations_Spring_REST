@@ -19,4 +19,6 @@ public interface CustService {
 	
 	public Object deleteCustomerById(Integer id);
 	
+	public List<Customer> getAllCustomers();
+	
 }

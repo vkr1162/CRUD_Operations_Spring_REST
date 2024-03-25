@@ -68,5 +68,10 @@ public class CustServiceImpl implements CustService {
 			return "Customer with Id: " + id + " is not found for deletion";
 		}
 	}
+	@Override
+	public List<Customer> getAllCustomers() {
+	List<Customer> listCust = custRepo.findAll();
+		return listCust;
+	}
 
 }
